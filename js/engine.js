@@ -71,6 +71,7 @@ var Engine = (function(global) {
     main();
   }
 
+
   /* This function is called by main (our game loop) and itself calls all
    * of the functions which may need to update entity's data. Based on how
    * you implement your collision detection (when two entities occupy the
@@ -85,10 +86,13 @@ var Engine = (function(global) {
     checkCollisions();
   }
 
+  var isCollision = false;
   function checkCollisions() {
+    isCollision = false;
     Game.allEnemies.forEach(function(enemy) {
-      enemy.checkCollision(Game.player);
+      isCollision = isCollision || enemy.checkCollision(Game.player);
     });
+    return isCollision;
   }
 
   /* This is called by the update function and loops through all of the
@@ -145,6 +149,19 @@ var Engine = (function(global) {
     }
 
     renderEntities();
+    setTimeout(function() {
+      if (isCollision) {
+        Game.player.reset();
+        alert('Wasted');
+      }
+    }, 0);
+    if (Game.player.checkWin()) {
+      setTimeout(function() {
+        Game.player.reset();
+        alert('Win!');
+      }, 0);
+    }
+
   }
 
   /* This function is called by the render function and is called on each game

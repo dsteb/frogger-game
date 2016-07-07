@@ -75,7 +75,6 @@
     // [0, 2]
     var lane = Math.floor(Math.random() * 3);
     var y = LANES[lane];
-    console.log(y, lane)
     this.setPos(this.initX, y);
     this.initSpeed();
   };
@@ -92,9 +91,9 @@
         rect1.x + rect1.w > rect2.x &&
         rect1.y < rect2.y + rect2.h &&
         rect1.y + rect1.h > rect2.y) {
-      console.log('WAISTED');
-      player.reset();
+      return true;
     }
+    return false;
   };
 
   // Player class has an update(), render() and
@@ -137,6 +136,10 @@
     if (this.checkBounds(x, y)) {
       this.setPos(x, y);
     }
+  };
+
+  Player.prototype.checkWin = function() {
+    return this.y < 50;
   };
 
   Player.prototype.checkBounds = function(x, y) {
