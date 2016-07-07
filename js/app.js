@@ -39,7 +39,25 @@
   Player.prototype = Object.create(ScreenObject.prototype);
 
   Player.prototype.handleInput = function(direction) {
-    console.log(direction);
+    var step = 20;
+    var x = this.x, y = this.y;
+    switch (direction) {
+      case 'up':
+        y -= step;
+        break;
+      case 'right':
+        x += step;
+        break;
+      case 'down':
+        y += step;
+        break;
+      case 'left':
+        x -= step;
+        break;
+    }
+    // TODO: check bounds
+    this.x = x;
+    this.y = y;
   };
 
   // Now instantiate your objects.
