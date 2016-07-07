@@ -78,7 +78,7 @@
   Player.prototype.checkBounds = function(x, y) {
     var maxWidth = ctx.canvas.width - 50;
     var maxHeight = ctx.canvas.height - 150;
-    if (x < 0 || y < 0 || x > maxWidth || y > maxHeight) {
+    if (x < 0 || y < -10 || x > maxWidth || y > maxHeight) {
       return false;
     }
     return true;
