@@ -12,9 +12,11 @@
   var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    this.x = 0;
+    this.initX = -100;
+    this.x = this.initX;
     this.y = 60;
-    this.speed = 100;
+    // [85, 135]
+    this.speed = 85 + Math.random() * 50;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -27,6 +29,10 @@
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x += this.speed * dt;
+    if (this.x > ctx.canvas.width) {
+      this.x = this.initX;
+    }
   };
 
   // Player class has an update(), render() and
