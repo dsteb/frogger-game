@@ -38,7 +38,7 @@
   };
 
   Enemy.prototype.initSpeed = function() {
-    // [100, 200]
+    // [150, 300]
     this.speed = 150 + Math.random() * 200;
   };
 
