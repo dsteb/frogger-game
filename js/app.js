@@ -38,7 +38,9 @@
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     this.initX = -100;
-    this.initY = 60;
+    // this.initY = 62;
+    // this.initY = 146;
+    // this.initY = 230;
     this.reset();
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -69,7 +71,12 @@
   };
 
   Enemy.prototype.reset = function() {
-    this.setPos(this.initX, this.initY);
+    var LANES = [62, 146, 230];
+    // [0, 2]
+    var lane = Math.floor(Math.random() * 3);
+    var y = LANES[lane];
+    console.log(y, lane)
+    this.setPos(this.initX, y);
     this.initSpeed();
   };
 
@@ -149,7 +156,7 @@
   // Place all enemy objects in an array called allEnemies
   // Place the player object in a variable called player
   var player = new Player();
-  var allEnemies = [new Enemy()];
+  var allEnemies = [new Enemy(), new Enemy(), new Enemy()];
 
   // This listens for key presses and sends the keys to your
   // Player.handleInput() method. You don't need to modify this.
