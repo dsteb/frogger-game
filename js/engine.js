@@ -15,6 +15,8 @@
  */
 
 var Engine = (function(global) {
+  'use strict';
+
   /* Predefine the variables we'll be using within this scope,
    * create the canvas element, grab the 2D context for that canvas
    * set the canvas elements height/width and add it to the DOM.
@@ -91,10 +93,10 @@ var Engine = (function(global) {
    * render methods.
    */
   function updateEntities(dt) {
-    allEnemies.forEach(function(enemy) {
+    Game.allEnemies.forEach(function(enemy) {
       enemy.update(dt);
     });
-    player.update();
+    Game.player.update();
   }
 
   /* This function initially draws the "game level", it will then call
@@ -147,11 +149,11 @@ var Engine = (function(global) {
     /* Loop through all of the objects within the allEnemies array and call
      * the render function you have defined.
      */
-    allEnemies.forEach(function(enemy) {
+    Game.allEnemies.forEach(function(enemy) {
       enemy.render();
     });
 
-    player.render();
+    Game.player.render();
   }
 
   /* This function does nothing but it could have been a good place to
