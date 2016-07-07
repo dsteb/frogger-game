@@ -107,6 +107,7 @@ var Engine = (function(global) {
       enemy.update(dt);
     });
     Game.player.update();
+    Game.score.update(dt);
   }
 
   /* This function initially draws the "game level", it will then call
@@ -149,19 +150,22 @@ var Engine = (function(global) {
     }
 
     renderEntities();
-    setTimeout(function() {
-      if (isCollision) {
+    if (isCollision) {
+      setTimeout(function() {
         Game.player.reset();
         alert('Wasted');
-      }
-    }, 0);
+      }, 0);
+    }
     if (Game.player.checkWin()) {
       setTimeout(function() {
         Game.player.reset();
-        alert('Win!');
+        if (Game.score.value < 0) {
+          alert('Look at your score! You can\'t call it win...');
+        } else {
+          alert('Win!');
+        }
       }, 0);
     }
-
   }
 
   /* This function is called by the render function and is called on each game
@@ -177,6 +181,8 @@ var Engine = (function(global) {
     });
 
     Game.player.render();
+
+    Game.score.render();
   }
 
   /* This function does nothing but it could have been a good place to

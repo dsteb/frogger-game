@@ -28,6 +28,7 @@
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     if (debug) {
       ctx.strokeStyle = 'red';
+      ctx.lineWidth = 1;
       ctx.strokeRect(this.box.x, this.box.y, this.box.w, this.box.h);
     }
   };
@@ -155,11 +156,37 @@
     this.setPos(this.initX, this.initY);
   };
 
+  var Score = function() {
+    this.value = 0;
+  };
+
+  Score.prototype.update = function(dt) {
+    if (player.y < 300) {
+      this.value += 1 * dt;
+    } else {
+      this.value -= 1 * dt;
+    }
+  };
+
+  Score.prototype.render = function() {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, 600, 50);
+    ctx.font = '36px Impact';
+    ctx.fillStyle = 'red';
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'black';
+    var x = 5, y = 40;
+    var txt = 'SCORE: ' + Math.round(this.value);
+    ctx.strokeText(txt, x, y);
+    ctx.fillText(txt, x, y);
+  };
+
   // Now instantiate your objects.
   // Place all enemy objects in an array called allEnemies
   // Place the player object in a variable called player
   var player = new Player();
   var allEnemies = [new Enemy(), new Enemy(), new Enemy()];
+  var score = new Score();
 
   // This listens for key presses and sends the keys to your
   // Player.handleInput() method. You don't need to modify this.
@@ -176,6 +203,7 @@
 
   global.Game = {
     allEnemies: allEnemies,
-    player: player
+    player: player,
+    score: score
   };
 })(this);

@@ -9,3 +9,4 @@ To run locally:
 
 ## Usage
 Use your keboard arrows to play! Let the frog to reach the water!
+KEEP OFF THE GRASS!
