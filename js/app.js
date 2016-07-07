@@ -52,20 +52,21 @@
   Player.prototype = Object.create(ScreenObject.prototype);
 
   Player.prototype.handleInput = function(direction) {
-    var step = 20;
+    var STEP_X = 100;
+    var STEP_Y = 82;
     var x = this.x, y = this.y;
     switch (direction) {
       case 'up':
-        y -= step;
+        y -= STEP_Y;
         break;
       case 'right':
-        x += step;
+        x += STEP_X;
         break;
       case 'down':
-        y += step;
+        y += STEP_Y;
         break;
       case 'left':
-        x -= step;
+        x -= STEP_X;
         break;
     }
     // TODO: check bounds
