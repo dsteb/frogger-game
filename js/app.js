@@ -4,6 +4,8 @@
   // change to true to see the boundaries of the objects
   var debug = true;
 
+  // We do not want inherit Player from Enemy, as Player is not Enemy.
+  // So this is the base class for all objects we add on the screen
   var ScreenObject = function() {};
 
   ScreenObject.prototype.setPos = function(x, y) {
@@ -14,8 +16,10 @@
 
   ScreenObject.prototype.initBox = function() {
     this.box = {
-      leftTop: {x: this.x, y: this.y},
-      rightBottom: {x: this.x + 50, y: this.y + 50}
+      x: this.x,
+      y: this.y,
+      w: 50,
+      h: 50
     };
   };
 
@@ -24,11 +28,7 @@
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     if (debug) {
       ctx.strokeStyle = 'red';
-      var x = this.box.leftTop.x;
-      var y = this.box.leftTop.y;
-      var width = this.box.rightBottom.x - x;
-      var height = this.box.rightBottom.y - y;
-      ctx.strokeRect(x, y, width, height);
+      ctx.strokeRect(this.box.x, this.box.y, this.box.w, this.box.h);
     }
   };
   ScreenObject.prototype.update = function() {};
@@ -48,8 +48,10 @@
 
   Enemy.prototype.initBox = function() {
     this.box = {
-      leftTop: {x: this.x, y: this.y + 77},
-      rightBottom: {x: this.x + 100, y: this.y + 77 + 65}
+      x: this.x,
+      y: this.y + 77,
+      w: 100,
+      h: 65
     };
   };
 
@@ -76,18 +78,34 @@
     this.speed = 150 + Math.random() * 200;
   };
 
+  Enemy.prototype.checkCollision = function(player) {
+    var rect1 = player.box;
+    var rect2 = this.box;
+    if (rect1.x < rect2.x + rect2.w &&
+        rect1.x + rect1.w > rect2.x &&
+        rect1.y < rect2.y + rect2.h &&
+        rect1.y + rect1.h > rect2.y) {
+      console.log('WAISTED');
+      player.reset();
+    }
+  };
+
   // Player class has an update(), render() and
   // a handleInput() method.
   var Player = function() {
-    this.setPos(200, 400);
+    this.initX = 200;
+    this.initY = 400;
+    this.reset();
     this.sprite = 'images/char-boy.png';
   };
   Player.prototype = Object.create(ScreenObject.prototype);
 
   Player.prototype.initBox = function() {
     this.box = {
-      leftTop: {x: this.x + 16, y: this.y + 65},
-      rightBottom: {x: this.x + 16 + 69, y: this.y + 65 + 75}
+      x: this.x + 16,
+      y: this.y + 65,
+      w: 69,
+      h: 75
     };
   };
 
@@ -121,6 +139,10 @@
       return false;
     }
     return true;
+  };
+
+  Player.prototype.reset = function() {
+    this.setPos(this.initX, this.initY);
   };
 
   // Now instantiate your objects.
