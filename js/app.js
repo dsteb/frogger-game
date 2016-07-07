@@ -15,8 +15,7 @@
     this.initX = -100;
     this.x = this.initX;
     this.y = 60;
-    // [85, 135]
-    this.speed = 85 + Math.random() * 50;
+    this.initSpeed();
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -31,8 +30,16 @@
     // all computers.
     this.x += this.speed * dt;
     if (this.x > ctx.canvas.width) {
+      // start from beginning
       this.x = this.initX;
+      // random speed
+      this.initSpeed();
     }
+  };
+
+  Enemy.prototype.initSpeed = function() {
+    // [100, 200]
+    this.speed = 150 + Math.random() * 200;
   };
 
   // Player class has an update(), render() and
