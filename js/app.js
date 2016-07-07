@@ -1,10 +1,35 @@
 (function(global) {
   'use strict';
 
+  // change to true to see the boundaries of the objects
+  var debug = true;
+
   var ScreenObject = function() {};
+
+  ScreenObject.prototype.setPos = function(x, y) {
+    this.x = x;
+    this.y = y;
+    this.initBox();
+  };
+
+  ScreenObject.prototype.initBox = function() {
+    this.box = {
+      leftTop: {x: this.x, y: this.y},
+      rightBottom: {x: this.x + 50, y: this.y + 50}
+    };
+  };
+
   // Draw the object on the screen, required method for game
   ScreenObject.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    if (debug) {
+      ctx.strokeStyle = 'red';
+      var x = this.box.leftTop.x;
+      var y = this.box.leftTop.y;
+      var width = this.box.rightBottom.x - x;
+      var height = this.box.rightBottom.y - y;
+      ctx.strokeRect(x, y, width, height);
+    }
   };
   ScreenObject.prototype.update = function() {};
 
@@ -13,14 +38,20 @@
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     this.initX = -100;
-    this.x = this.initX;
-    this.y = 60;
-    this.initSpeed();
+    this.initY = 60;
+    this.reset();
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
   };
   Enemy.prototype = Object.create(ScreenObject.prototype);
+
+  Enemy.prototype.initBox = function() {
+    this.box = {
+      leftTop: {x: this.x, y: this.y + 77},
+      rightBottom: {x: this.x + 100, y: this.y + 77 + 65}
+    };
+  };
 
   // Update the enemy's position, required method for game
   // Parameter: dt, a time delta between ticks
@@ -28,28 +59,37 @@
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x += this.speed * dt;
+    var x = this.x + this.speed * dt;
+    this.setPos(x, this.y);
     if (this.x > ctx.canvas.width) {
-      // start from beginning
-      this.x = this.initX;
-      // random speed
-      this.initSpeed();
+      this.reset();
     }
   };
 
+  Enemy.prototype.reset = function() {
+    this.setPos(this.initX, this.initY);
+    this.initSpeed();
+  };
+
   Enemy.prototype.initSpeed = function() {
-    // [150, 300]
+    // [150, 350]
     this.speed = 150 + Math.random() * 200;
   };
 
   // Player class has an update(), render() and
   // a handleInput() method.
   var Player = function() {
-    this.x = 200;
-    this.y = 400;
+    this.setPos(200, 400);
     this.sprite = 'images/char-boy.png';
   };
   Player.prototype = Object.create(ScreenObject.prototype);
+
+  Player.prototype.initBox = function() {
+    this.box = {
+      leftTop: {x: this.x + 16, y: this.y + 65},
+      rightBottom: {x: this.x + 16 + 69, y: this.y + 65 + 75}
+    };
+  };
 
   Player.prototype.handleInput = function(direction) {
     var STEP_X = 100;
@@ -70,8 +110,7 @@
         break;
     }
     if (this.checkBounds(x, y)) {
-      this.x = x;
-      this.y = y;
+      this.setPos(x, y);
     }
   };
 
