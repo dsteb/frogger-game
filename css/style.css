@@ -6,14 +6,17 @@ body {
   display: inline-block;
 }
 
-.selected {
+.selected > img {
   background-image: url('../images/Selector.png');
 }
 
 .hero:hover:not(.selected) {
-  background-image: url('../images/Selector.png');
   cursor: pointer;
   opacity: 0.7;
+}
+
+.hero:hover:not(.selected) > img {
+  background-image: url('../images/Selector.png');
 }
 
 .buttons {
