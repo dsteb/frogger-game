@@ -247,6 +247,16 @@
     }
   };
 
+  Player.prototype.wasted = function() {
+    this.reset();
+    if (this.health === 5) {
+      textBoard.showText('Game Over!');
+    } else {
+      textBoard.showText('waisted!');
+    }
+
+  };
+
   Player.prototype.onGemCaptured = function(gem) {
     if (gem.isVisible) {
       gem.hide();
@@ -277,6 +287,28 @@
     var txt = 'SCORE: ' + Math.round(this.value);
     ctx.strokeText(txt, x, y);
     ctx.fillText(txt, x, y);
+  };
+
+  // Class for showing different text messages on the screen
+  var TextBoard = function() {};
+  TextBoard.prototype.render = function() {
+    if (this.txt) {
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'black';
+      ctx.font = '46px Impact';
+      ctx.fillStyle = 'white';
+      var x = 160, y = 300;
+      ctx.strokeText(this.txt, x, y);
+      ctx.fillText(this.txt, x, y);
+    }
+  };
+
+  TextBoard.prototype.showText = function(txt, x, y) {
+    this.txt = txt.toUpperCase();
+    var that = this;
+    setTimeout(function() {
+      that.txt = '';
+    }, 3000);
   };
 
   // On Canvas click handler
@@ -310,6 +342,7 @@
   // Now instantiate your objects.
   // Place all enemy objects in an array called allEnemies
   // Place the player object in a variable called player
+  var textBoard = new TextBoard();
   var player = new Player();
   var allEnemies = [new Enemy(), new Enemy(), new Enemy()];
   var score = new Score();
@@ -333,6 +366,7 @@
     player: player,
     score: score,
     onCanvasClick: onClick,
-    gem: gem
+    gem: gem,
+    text: textBoard
   };
 })(this);

@@ -156,8 +156,7 @@ var Engine = (function(global) {
     renderEntities();
     if (isPlayerWasted) {
       setTimeout(function() {
-        Game.player.reset();
-        alert('Wasted');
+        Game.player.wasted();
       }, 0);
     }
     if (Game.player.checkWin()) {
@@ -188,6 +187,7 @@ var Engine = (function(global) {
 
     Game.player.render();
     Game.score.render();
+    Game.text.render();
   }
 
   /* This function does nothing but it could have been a good place to
