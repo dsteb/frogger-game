@@ -164,7 +164,7 @@ var Engine = (function(global) {
         if (Game.score.value < 0) {
           Game.text.showText('Game Over!');
         } else {
-          Game.text.showText('You won!');
+          Game.text.showText('Mission passed!', 100);
         }
         Game.player.win();
       }, 0);

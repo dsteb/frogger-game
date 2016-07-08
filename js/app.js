@@ -303,15 +303,16 @@
       ctx.strokeStyle = 'black';
       ctx.font = '46px Impact';
       ctx.fillStyle = 'white';
-      var x = 160, y = 300;
-      ctx.strokeText(this.txt, x, y);
-      ctx.fillText(this.txt, x, y);
+      ctx.strokeText(this.txt, this.x, this.y);
+      ctx.fillText(this.txt, this.x, this.y);
     }
   };
 
   TextBoard.prototype.showText = function(txt, x, y) {
     this.txt = txt.toUpperCase();
     var that = this;
+    this.x = x || 160;
+    this.y = y || 300;
     setTimeout(function() {
       that.txt = '';
     }, 3000);
