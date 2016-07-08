@@ -181,6 +181,31 @@
     ctx.fillText(txt, x, y);
   };
 
+  function onClick(event) {
+      var element = event.target;
+      var offsetX = 0, offsetY = 0;
+
+      if (element.offsetParent) {
+        do {
+            offsetX += element.offsetLeft;
+            offsetY += element.offsetTop;
+        } while ((element = element.offsetParent));
+      }
+
+      var x = event.pageX - offsetX;
+      var y = event.pageY - offsetY;
+      // 248 422 200 400
+      if (player.x < x && x < player.x + 100 && player.y - 30 < y && y < player.y + 70) {
+        player.handleInput('up');
+      } else if (player.x + 100 < x && x < player.x + 200 && player.y + 60 < y && y < player.y + 160) {
+        player.handleInput('right');
+      } else if (player.x < x && x < player.x + 100 && player.y + 140 < y && y < player.y + 240) {
+        player.handleInput('down');
+      } else if (player.x - 100 < x && x < player.x && player.y + 60 < y &&  y < player.y + 160) {
+        player.handleInput('left');
+      }
+    }
+
   // Now instantiate your objects.
   // Place all enemy objects in an array called allEnemies
   // Place the player object in a variable called player
@@ -204,6 +229,7 @@
   global.Game = {
     allEnemies: allEnemies,
     player: player,
-    score: score
+    score: score,
+    onCanvasClick: onClick
   };
 })(this);
