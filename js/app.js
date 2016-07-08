@@ -178,8 +178,20 @@
     this.initY = 400;
     this.reset();
     this.sprite = 'images/char-boy.png';
+    this.health = 5;
+    this.healthSprite = 'images/Heart.png';
   };
   Player.prototype = Object.create(ScreenObject.prototype);
+
+  Player.prototype.render = function() {
+    ScreenObject.prototype.render.call(this);
+    // remove previous hearts
+    ctx.fillStyle = 'white';
+    ctx.fillRect(300, 0, 600, 50);
+    for (var i = 0; i < this.health; ++i) {
+      ctx.drawImage(Resources.get(this.healthSprite), 470 - i * 30, 0, 33, 56);
+    }
+  };
 
   Player.prototype.initBox = function() {
     this.box = {
@@ -228,6 +240,11 @@
 
   Player.prototype.reset = function() {
     this.setPos(this.initX, this.initY);
+    this.health--;
+    if (this.health === 0) {
+      this.health = 5;
+      score.value = 0;
+    }
   };
 
   Player.prototype.onGemCaptured = function(gem) {
@@ -251,7 +268,7 @@
 
   Score.prototype.render = function() {
     ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, 600, 50);
+    ctx.fillRect(0, 0, 300, 50);
     ctx.font = '36px Impact';
     ctx.fillStyle = 'red';
     ctx.lineWidth = 3;
