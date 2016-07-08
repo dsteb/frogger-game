@@ -87,13 +87,15 @@ var Engine = (function(global) {
     checkCollisions();
   }
 
-  var isCollision = false;
+  var isPlayerWasted = false;
   function checkCollisions() {
-    isCollision = false;
+    isPlayerWasted = false;
     Game.allEnemies.forEach(function(enemy) {
-      isCollision = isCollision || enemy.checkCollision(Game.player);
+      isPlayerWasted = isPlayerWasted || enemy.checkCollision(Game.player);
     });
-    return isCollision;
+    if (Game.player.checkCollision(Game.gem)) {
+      Game.player.onGemCaptured(Game.gem);
+    }
   }
 
   /* This is called by the update function and loops through all of the
@@ -152,7 +154,7 @@ var Engine = (function(global) {
     }
 
     renderEntities();
-    if (isCollision) {
+    if (isPlayerWasted) {
       setTimeout(function() {
         Game.player.reset();
         alert('Wasted');

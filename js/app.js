@@ -35,31 +35,40 @@
       ctx.strokeRect(this.box.x, this.box.y, this.box.w, this.box.h);
     }
   };
+
+  // Checks if given Screen Object box intersects with this Screen Object box
+  ScreenObject.prototype.checkCollision = function(object) {
+    var rect1 = object.box;
+    var rect2 = this.box;
+    if (rect1.x < rect2.x + rect2.w &&
+        rect1.x + rect1.w > rect2.x &&
+        rect1.y < rect2.y + rect2.h &&
+        rect1.y + rect1.h > rect2.y) {
+      return true;
+    }
+    return false;
+  };
+
   ScreenObject.prototype.update = function() {};
 
   var Gem = function() {
-    var COLUMNS = [25, 126, 227, 328, 430];
-    var LANES = [120, 204, 284];
-    // [0, 4]
-    var column = Math.floor(Math.random() * 5);
-    var x = COLUMNS[column];
-    // [0, 2]
-    var lane = Math.floor(Math.random() * 3);
-    var y = LANES[lane];
-    this.width = 50;
-    this.height = 85;
-    this.setPos(x, y);
+    this.width = 0;
+    this.height = 0;
+    this.setPos(0, 0);
     this.sprite = 'images/Gem Orange.png';
+    this.hide();
   };
   Gem.prototype = Object.create(ScreenObject.prototype);
 
   Gem.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y, this.width,
-        this.height);
-    if (debug) {
-      ctx.strokeStyle = 'red';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(this.box.x, this.box.y, this.box.w, this.box.h);
+    if (this.isVisible) {
+      ctx.drawImage(Resources.get(this.sprite), this.x, this.y, this.width,
+          this.height);
+      if (debug) {
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(this.box.x, this.box.y, this.box.w, this.box.h);
+      }
     }
   };
 
@@ -70,6 +79,26 @@
       w: 50,
       h: 50
     };
+  };
+
+  Gem.prototype.hide = function() {
+    this.isVisible = false;
+    setTimeout(this.reset.bind(this), 10000);
+  };
+
+  Gem.prototype.reset = function() {
+    var COLUMNS = [25, 126, 227, 328, 430];
+    var LANES = [120, 204, 284];
+    this.isVisible = true;
+    // [0, 4]
+    var column = Math.floor(Math.random() * 5);
+    var x = COLUMNS[column];
+    // [0, 2]
+    var lane = Math.floor(Math.random() * 3);
+    var y = LANES[lane];
+    this.width = 50;
+    this.height = 85;
+    this.setPos(x, y);
   };
 
   // Enemies our player must avoid
@@ -121,18 +150,6 @@
   Enemy.prototype.initSpeed = function() {
     // [150, 350]
     this.speed = 150 + Math.random() * 200;
-  };
-
-  Enemy.prototype.checkCollision = function(player) {
-    var rect1 = player.box;
-    var rect2 = this.box;
-    if (rect1.x < rect2.x + rect2.w &&
-        rect1.x + rect1.w > rect2.x &&
-        rect1.y < rect2.y + rect2.h &&
-        rect1.y + rect1.h > rect2.y) {
-      return true;
-    }
-    return false;
   };
 
   // Player class has an update(), render() and
@@ -194,6 +211,15 @@
     this.setPos(this.initX, this.initY);
   };
 
+  Player.prototype.onGemCaptured = function(gem) {
+    if (gem.isVisible) {
+      gem.hide();
+      if (gem.sprite.toLowerCase().indexOf('orange') !== -1) {
+        score.value += 15;
+      }
+    }
+  };
+
   var Score = function() {
     this.value = 0;
   };
@@ -219,6 +245,9 @@
     ctx.fillText(txt, x, y);
   };
 
+  // On Canvas click handler
+  // This is done to play on touch device
+  // Anyway it's not very handy :)
   function onClick(event) {
       var element = event.target;
       var offsetX = 0, offsetY = 0;
