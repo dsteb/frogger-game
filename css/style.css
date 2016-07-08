@@ -1,3 +1,21 @@
 body {
     text-align: center;
 }
+
+.hero {
+  display: inline-block;
+}
+
+.selected {
+  background-image: url('../images/Selector.png');
+}
+
+.hero:hover:not(.selected) {
+  background-image: url('../images/Selector.png');
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.buttons {
+  margin-top: 20px;
+}

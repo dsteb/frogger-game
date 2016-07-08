@@ -14,7 +14,8 @@
  * a little simpler to work with.
  */
 
-var Engine = (function(global) {
+
+(function(global) {
   'use strict';
 
   /* Predefine the variables we'll be using within this scope,
@@ -195,7 +196,9 @@ var Engine = (function(global) {
    * those sorts of things. It's only called once by the init() method.
    */
   function reset() {
-    // noop
+    Game.player.reset();
+    // hide: wait 10 seconds and then do reset
+    Game.gem.hide();
   }
 
   /* Go ahead and load all of the images we know we're going to need to
@@ -208,16 +211,24 @@ var Engine = (function(global) {
     'images/grass-block.png',
     'images/enemy-bug.png',
     'images/char-boy.png',
+    'images/char-pink-girl.png',
+    'images/char-cat-girl.png',
+    'images/char-horn-girl.png',
+    'images/char-princess-girl.png',
     'images/Gem Orange.png',
     'images/Gem Blue.png',
     'images/Gem Green.png',
     'images/Heart.png'
   ]);
-  Resources.onReady(init);
+  Resources.onReady(function() {});
 
   /* Assign the canvas' context object to the global variable (the window
    * object when run in a browser) so that developers can use it more easily
    * from within their app.js files.
    */
   global.ctx = ctx;
+
+  global.Engine = {
+    init: init,
+  };
 })(this);

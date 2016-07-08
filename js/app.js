@@ -56,7 +56,6 @@
     this.height = 0;
     this.setPos(0, 0);
     this.sprite = 'images/Gem Orange.png';
-    this.hide();
   };
   Gem.prototype = Object.create(ScreenObject.prototype);
 
@@ -239,12 +238,9 @@
   };
 
   Player.prototype.reset = function() {
+    var $img = $('img', '.selected');
+    this.sprite = $img.attr('src');
     this.setPos(this.initX, this.initY);
-    this.health--;
-    if (this.health === 0) {
-      this.health = 5;
-      score.value = 0;
-    }
   };
 
   Player.prototype.win = function() {
@@ -255,7 +251,10 @@
 
   Player.prototype.wasted = function() {
     this.reset();
-    if (this.health === 5) {
+    this.health--;
+    if (this.health === 0) {
+      this.health = 5;
+      score.value = 0;
       textBoard.showText('Game Over!');
     } else {
       textBoard.showText('wasted!');
@@ -366,6 +365,16 @@
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
+  });
+
+  $('.hero').click(function() {
+    $('.selected').removeClass('selected');
+    $(this).addClass('selected');
+  });
+
+  $('#start-btn').click(function() {
+    $('#heroes').hide();
+    Engine.init();
   });
 
   global.Game = {
