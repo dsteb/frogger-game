@@ -8,12 +8,15 @@
   // So this is the base class for all objects we add on the screen
   var ScreenObject = function() {};
 
+  // Sets the x and y values for the object and rebuild box coordinates
   ScreenObject.prototype.setPos = function(x, y) {
     this.x = x;
     this.y = y;
     this.initBox();
   };
 
+  // Rebuilds box coordinates for the object that are used for collision
+  // and for debug box around objects
   ScreenObject.prototype.initBox = function() {
     this.box = {
       x: this.x,
@@ -33,6 +36,41 @@
     }
   };
   ScreenObject.prototype.update = function() {};
+
+  var Gem = function() {
+    var COLUMNS = [25, 126, 227, 328, 430];
+    var LANES = [120, 204, 284];
+    // [0, 4]
+    var column = Math.floor(Math.random() * 5);
+    var x = COLUMNS[column];
+    // [0, 2]
+    var lane = Math.floor(Math.random() * 3);
+    var y = LANES[lane];
+    this.width = 50;
+    this.height = 85;
+    this.setPos(x, y);
+    this.sprite = 'images/Gem Orange.png';
+  };
+  Gem.prototype = Object.create(ScreenObject.prototype);
+
+  Gem.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y, this.width,
+        this.height);
+    if (debug) {
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(this.box.x, this.box.y, this.box.w, this.box.h);
+    }
+  };
+
+  Gem.prototype.initBox = function() {
+    this.box = {
+      x: this.x,
+      y: this.y + 30,
+      w: 50,
+      h: 50
+    };
+  };
 
   // Enemies our player must avoid
   var Enemy = function() {
@@ -212,6 +250,7 @@
   var player = new Player();
   var allEnemies = [new Enemy(), new Enemy(), new Enemy()];
   var score = new Score();
+  var gem = new Gem();
 
   // This listens for key presses and sends the keys to your
   // Player.handleInput() method. You don't need to modify this.
@@ -230,6 +269,7 @@
     allEnemies: allEnemies,
     player: player,
     score: score,
-    onCanvasClick: onClick
+    onCanvasClick: onClick,
+    gem: gem
   };
 })(this);

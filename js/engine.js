@@ -107,6 +107,7 @@ var Engine = (function(global) {
     Game.allEnemies.forEach(function(enemy) {
       enemy.update(dt);
     });
+    Game.gem.update(dt);
     Game.player.update();
     Game.score.update(dt);
   }
@@ -177,12 +178,13 @@ var Engine = (function(global) {
     /* Loop through all of the objects within the allEnemies array and call
      * the render function you have defined.
      */
+    Game.gem.render();
+
     Game.allEnemies.forEach(function(enemy) {
       enemy.render();
     });
 
     Game.player.render();
-
     Game.score.render();
   }
 
@@ -203,7 +205,8 @@ var Engine = (function(global) {
     'images/water-block.png',
     'images/grass-block.png',
     'images/enemy-bug.png',
-    'images/char-boy.png'
+    'images/char-boy.png',
+    'images/Gem Orange.png'
   ]);
   Resources.onReady(init);
 
