@@ -82,6 +82,9 @@
   };
 
   Gem.prototype.hide = function() {
+    if (this.transformTimer) {
+      clearTimeout(this.transformTimer);
+    }
     this.isVisible = false;
     setTimeout(this.reset.bind(this), 10000);
   };
@@ -90,6 +93,8 @@
     var COLUMNS = [25, 126, 227, 328, 430];
     var LANES = [120, 204, 284];
     this.isVisible = true;
+    this.value = 15;
+    this.sprite = 'images/Gem Orange.png';
     // [0, 4]
     var column = Math.floor(Math.random() * 5);
     var x = COLUMNS[column];
@@ -99,6 +104,20 @@
     this.width = 50;
     this.height = 85;
     this.setPos(x, y);
+    this.transformTimer = setTimeout(this.transform.bind(this), 10000);
+  };
+
+  // after gem is appeared, in 10 seconds it is transformed to the next stage
+  Gem.prototype.transform = function() {
+    if (this.sprite.toLowerCase().indexOf('orange') !== -1) {
+      this.sprite = 'images/Gem Blue.png';
+      this.value = 10;
+      this.transformTimer = setTimeout(this.transform.bind(this), 10000);
+    } else if (this.sprite.toLowerCase().indexOf('blue') !== -1) {
+      this.sprite = 'images/Gem Green.png';
+      this.value = 5;
+      this.transformTimer = setTimeout(this.hide.bind(this), 10000);
+    }
   };
 
   // Enemies our player must avoid
@@ -214,9 +233,7 @@
   Player.prototype.onGemCaptured = function(gem) {
     if (gem.isVisible) {
       gem.hide();
-      if (gem.sprite.toLowerCase().indexOf('orange') !== -1) {
-        score.value += 15;
-      }
+      score.value += gem.value;
     }
   };
 
