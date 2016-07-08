@@ -161,12 +161,12 @@ var Engine = (function(global) {
     }
     if (Game.player.checkWin()) {
       setTimeout(function() {
-        Game.player.reset();
         if (Game.score.value < 0) {
-          alert('Look at your score! You can\'t call it win...');
+          Game.text.showText('Game Over!');
         } else {
-          alert('Win!');
+          Game.text.showText('You won!');
         }
+        Game.player.win();
       }, 0);
     }
   }

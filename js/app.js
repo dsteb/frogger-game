@@ -247,12 +247,18 @@
     }
   };
 
+  Player.prototype.win = function() {
+    this.reset();
+    this.health = 5;
+    score.value = 0;
+  };
+
   Player.prototype.wasted = function() {
     this.reset();
     if (this.health === 5) {
       textBoard.showText('Game Over!');
     } else {
-      textBoard.showText('waisted!');
+      textBoard.showText('wasted!');
     }
 
   };
