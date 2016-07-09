@@ -400,9 +400,30 @@
       37: 'left',
       38: 'up',
       39: 'right',
-      40: 'down'
+      40: 'down',
+      13: 'enter',
+      32: 'space'
     };
-
+    // handle keyboard characters to choose character
+    if ($('#heroes:visible')) {
+      var key = allowedKeys[e.keyCode];
+      if (key === 'left' || key === 'right') {
+        var $sibling, $selected;
+        if (key === 'left') {
+          $selected = $('.selected');
+          $sibling = $selected.prev('.hero:not(.disabled)');
+        } else if (key === 'right') {
+          $selected = $('.selected');
+          $sibling = $selected.next('.hero:not(.disabled)');
+        }
+        if ($selected.length && $sibling.length) {
+          $selected.removeClass('selected');
+          $sibling.addClass('selected');
+        }
+      } else if (key === 'space' || key === 'enter') {
+        $('#start-btn').click();
+      }
+    }
     player.handleInput(allowedKeys[e.keyCode]);
   });
 
