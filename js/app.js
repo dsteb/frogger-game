@@ -414,9 +414,14 @@
       }
     });
     $('#start-btn').click(function() {
+      $(this).hide();
+      $('#menu-btn').removeClass('hidden');
       $('#heroes').hide();
       Engine.init();
     });
+    $('#menu-btn').click(function() {
+      location.href = location.href;
+    })
     var maxLevel = localStorage.getItem('maxLevel');
     if (maxLevel) {
       for (var i = 1; i <= maxLevel; ++i) {

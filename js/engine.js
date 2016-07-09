@@ -28,10 +28,11 @@
     ctx = canvas.getContext('2d'),
     lastTime;
 
+  canvas.className = 'hidden';
   canvas.width = 505;
   canvas.height = 606;
   canvas.addEventListener('click', Game.onCanvasClick);
-  doc.body.appendChild(canvas);
+  doc.body.insertBefore(canvas, doc.body.firstChild);
 
   /* This function serves as the kickoff point for the game loop itself
    * and handles properly calling the update and render methods.
@@ -68,6 +69,7 @@
    * game loop.
    */
   function init() {
+    canvas.className = '';
     reset();
     lastTime = Date.now();
     main();
