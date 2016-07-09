@@ -10,13 +10,19 @@ body {
   background-image: url('../images/Selector.png');
 }
 
-.hero:hover:not(.selected) {
+.hero:hover:not(.selected):not(.disabled) {
   cursor: pointer;
   opacity: 0.7;
 }
 
-.hero:hover:not(.selected) > img {
+.hero:hover:not(.selected):not(.disabled) > img {
   background-image: url('../images/Selector.png');
+}
+
+.disabled {
+  opacity: 0.5;
+  -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+  filter: grayscale(100%);
 }
 
 .buttons {

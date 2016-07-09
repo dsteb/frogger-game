@@ -16,7 +16,7 @@
   };
 
   // Rebuilds box coordinates for the object that are used for collision
-  // and for debug box around objects
+  // and for debug
   ScreenObject.prototype.initBox = function() {
     this.box = {
       x: this.x,
@@ -317,7 +317,7 @@
   // On Canvas click handler
   // This is done to play on touch device
   // Anyway it's not very handy :)
-  function onClick(event) {
+  function onCanvasClick(event) {
     var element = event.target;
     var offsetX = 0, offsetY = 0;
 
@@ -402,8 +402,10 @@
   });
 
   $('.hero').click(function() {
-    $('.selected').removeClass('selected');
-    $(this).addClass('selected');
+    if (!$(this).is('.disabled')) {
+      $('.selected').removeClass('selected');
+      $(this).addClass('selected');
+    }
   });
 
   $('#start-btn').click(function() {
@@ -415,7 +417,7 @@
     allEnemies: allEnemies,
     player: player,
     score: score,
-    onCanvasClick: onClick,
+    onCanvasClick: onCanvasClick,
     gem: gem,
     text: textBoard,
     reset: reset
