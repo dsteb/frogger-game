@@ -336,14 +336,13 @@
 
     var x = event.pageX - offsetX;
     var y = event.pageY - offsetY;
-    // 248 422 200 400
-    if (player.x < x && x < player.x + 100 && player.y - 30 < y && y < player.y + 70) {
+    if (player.x < x && x < player.x + 100 && y < player.y + 70) {
       player.handleInput('up');
-    } else if (player.x + 100 < x && x < player.x + 200 && player.y + 60 < y && y < player.y + 160) {
+    } else if (player.x + 100 < x && player.y + 60 < y && y < player.y + 160) {
       player.handleInput('right');
-    } else if (player.x < x && x < player.x + 100 && player.y + 140 < y && y < player.y + 240) {
+    } else if (player.x < x && x < player.x + 100 && player.y + 140 < y) {
       player.handleInput('down');
-    } else if (player.x - 100 < x && x < player.x && player.y + 60 < y &&  y < player.y + 160) {
+    } else if (x < player.x && player.y + 60 < y &&  y < player.y + 160) {
       player.handleInput('left');
     }
   }
