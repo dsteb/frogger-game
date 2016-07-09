@@ -196,7 +196,7 @@
    * those sorts of things. It's only called once by the init() method.
    */
   function reset() {
-    Game.player.reset();
+    Game.reset();
     // hide: wait 10 seconds and then do reset
     Game.gem.hide();
   }

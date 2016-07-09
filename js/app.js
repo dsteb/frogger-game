@@ -120,13 +120,11 @@
   };
 
   // Enemies our player must avoid
-  var Enemy = function() {
+  var Enemy = function(baseSpeed) {
+    this.baseSpeed = baseSpeed;
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     this.initX = -100;
-    // this.initY = 62;
-    // this.initY = 146;
-    // this.initY = 230;
     this.reset();
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -166,8 +164,7 @@
   };
 
   Enemy.prototype.initSpeed = function() {
-    // [150, 350]
-    this.speed = 150 + Math.random() * 200;
+    this.speed = this.baseSpeed + Math.random() * 200;
   };
 
   // Player class has an update(), render() and
@@ -321,38 +318,75 @@
   // This is done to play on touch device
   // Anyway it's not very handy :)
   function onClick(event) {
-      var element = event.target;
-      var offsetX = 0, offsetY = 0;
+    var element = event.target;
+    var offsetX = 0, offsetY = 0;
 
-      if (element.offsetParent) {
-        do {
-            offsetX += element.offsetLeft;
-            offsetY += element.offsetTop;
-        } while ((element = element.offsetParent));
-      }
-
-      var x = event.pageX - offsetX;
-      var y = event.pageY - offsetY;
-      // 248 422 200 400
-      if (player.x < x && x < player.x + 100 && player.y - 30 < y && y < player.y + 70) {
-        player.handleInput('up');
-      } else if (player.x + 100 < x && x < player.x + 200 && player.y + 60 < y && y < player.y + 160) {
-        player.handleInput('right');
-      } else if (player.x < x && x < player.x + 100 && player.y + 140 < y && y < player.y + 240) {
-        player.handleInput('down');
-      } else if (player.x - 100 < x && x < player.x && player.y + 60 < y &&  y < player.y + 160) {
-        player.handleInput('left');
-      }
+    if (element.offsetParent) {
+      do {
+          offsetX += element.offsetLeft;
+          offsetY += element.offsetTop;
+      } while ((element = element.offsetParent));
     }
+
+    var x = event.pageX - offsetX;
+    var y = event.pageY - offsetY;
+    // 248 422 200 400
+    if (player.x < x && x < player.x + 100 && player.y - 30 < y && y < player.y + 70) {
+      player.handleInput('up');
+    } else if (player.x + 100 < x && x < player.x + 200 && player.y + 60 < y && y < player.y + 160) {
+      player.handleInput('right');
+    } else if (player.x < x && x < player.x + 100 && player.y + 140 < y && y < player.y + 240) {
+      player.handleInput('down');
+    } else if (player.x - 100 < x && x < player.x && player.y + 60 < y &&  y < player.y + 160) {
+      player.handleInput('left');
+    }
+  }
+
+  // we detect the level by Player sprite
+  function getLevel() {
+    var sprite = player.sprite.toLowerCase();
+    if (sprite.indexOf('boy') !== -1) {
+      return 0;
+    } else if (sprite.indexOf('pink') !== -1) {
+      return 1;
+    } else if (sprite.indexOf('cat') !== -1) {
+      return 2;
+    } else if (sprite.indexOf('horn') !== -1) {
+      return 3;
+    } else if (sprite.indexOf('princess') !== -1) {
+      return 4;
+    }
+  }
+
+  function reset() {
+    player.reset();
+    gem.reset();
+    var level = getLevel();
+    var enemyNumber = 3;
+    var speed = 150;
+    if (level === 1) {
+      enemyNumber = 4;
+    } else if (level > 1) {
+      if (level === 3) {
+        speed += 30;
+      } else if (level === 4) {
+        speed += 60;
+      }
+      enemyNumber = 5;
+    }
+    for (var i = 0; i < enemyNumber; ++i) {
+      allEnemies.push(new Enemy(speed));
+    }
+  }
 
   // Now instantiate your objects.
   // Place all enemy objects in an array called allEnemies
   // Place the player object in a variable called player
-  var textBoard = new TextBoard();
   var player = new Player();
-  var allEnemies = [new Enemy(), new Enemy(), new Enemy()];
+  var textBoard = new TextBoard();
   var score = new Score();
   var gem = new Gem();
+  var allEnemies = [];
 
   // This listens for key presses and sends the keys to your
   // Player.handleInput() method. You don't need to modify this.
@@ -383,6 +417,7 @@
     score: score,
     onCanvasClick: onClick,
     gem: gem,
-    text: textBoard
+    text: textBoard,
+    reset: reset
   };
 })(this);
