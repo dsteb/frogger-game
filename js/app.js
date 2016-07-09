@@ -243,6 +243,12 @@
   Player.prototype.win = function() {
     this.reset();
     this.health = 5;
+    if (score.value >= 50) {
+      var level = getLevel();
+      var maxLevel = localStorage.getItem('maxLevel');
+      maxLevel = Math.max(level + 1, maxLevel);
+      localStorage.setItem('maxLevel', maxLevel);
+    }
     score.value = 0;
   };
 
@@ -401,16 +407,23 @@
     player.handleInput(allowedKeys[e.keyCode]);
   });
 
-  $('.hero').click(function() {
-    if (!$(this).is('.disabled')) {
-      $('.selected').removeClass('selected');
-      $(this).addClass('selected');
+  $(document).ready(function() {
+    $('.hero').click(function() {
+      if (!$(this).is('.disabled')) {
+        $('.selected').removeClass('selected');
+        $(this).addClass('selected');
+      }
+    });
+    $('#start-btn').click(function() {
+      $('#heroes').hide();
+      Engine.init();
+    });
+    var maxLevel = localStorage.getItem('maxLevel');
+    if (maxLevel) {
+      for (var i = 1; i <= maxLevel; ++i) {
+        $('.level' + i).removeClass('disabled');
+      }
     }
-  });
-
-  $('#start-btn').click(function() {
-    $('#heroes').hide();
-    Engine.init();
   });
 
   global.Game = {
