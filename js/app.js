@@ -363,12 +363,15 @@
     }
   }
 
+  // Game reset function is called by button "reset", by game start and
+  // on game over
   function reset() {
     player.reset();
     gem.reset();
     var level = getLevel();
     var enemyNumber = 3;
     var speed = 150;
+    enemyNumber = 3;
     if (level === 1) {
       enemyNumber = 4;
     } else if (level > 1) {
@@ -379,9 +382,11 @@
       }
       enemyNumber = 5;
     }
+    allEnemies.length = 0;
     for (var i = 0; i < enemyNumber; ++i) {
       allEnemies.push(new Enemy(speed));
     }
+    score.value = 0;
   }
 
   // Now instantiate your objects.
@@ -436,13 +441,16 @@
     });
     $('#start-btn').click(function() {
       $(this).hide();
-      $('#menu-btn').removeClass('hidden');
+      $('#menu-btn,#reset-btn').removeClass('hidden');
       $('#heroes').hide();
       Engine.init();
     });
     $('#menu-btn').click(function() {
       location.href = location.href;
-    })
+    });
+    $('#reset-btn').click(function() {
+      reset();
+    });
     var maxLevel = localStorage.getItem('maxLevel');
     if (maxLevel) {
       for (var i = 1; i <= maxLevel; ++i) {
