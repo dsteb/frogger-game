@@ -3,9 +3,9 @@
 [More info about this kind of games.](https://en.wikipedia.org/wiki/Frogger)
 
 ## Run
-You do not need to run it! You can play it [here](https://dsteb.github.io/frogger-game).
+You can play it [here](https://dsteb.github.io/frogger-game).
 
-If you insist, to run locally:
+If you want to run it locally:
 - Clone [this repo](https://github.com/dsteb/frogger-game).
 - Just open `index.html` in the browser.
 
