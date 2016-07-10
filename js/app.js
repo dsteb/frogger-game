@@ -29,6 +29,7 @@
   // Draw the object on the screen, required method for game
   ScreenObject.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    // red debug box around any object
     if (debug) {
       ctx.strokeStyle = 'red';
       ctx.lineWidth = 1;
@@ -36,7 +37,7 @@
     }
   };
 
-  // Checks if given Screen Object box intersects with this Screen Object box
+  // Checks if given box intersects with this Screen Object box
   ScreenObject.prototype.checkCollision = function(object) {
     var rect1 = object.box;
     var rect2 = this.box;
@@ -49,7 +50,10 @@
     return false;
   };
 
-  ScreenObject.prototype.update = function() {};
+  // default function is called by Engine - does nothing
+  ScreenObject.prototype.update = function() {
+    // nop
+  };
 
   var Gem = function() {
     this.width = 0;
@@ -71,6 +75,7 @@
     }
   };
 
+  // box for calculating collisions
   Gem.prototype.initBox = function() {
     this.box = {
       x: this.x,
@@ -80,6 +85,7 @@
     };
   };
 
+  // hide Gem and show again in 10 seconds
   Gem.prototype.hide = function() {
     if (this.transformTimer) {
       clearTimeout(this.transformTimer);
@@ -89,9 +95,11 @@
   };
 
   Gem.prototype.reset = function() {
+    // we have 4x3 cells to put a gem
     var COLUMNS = [25, 126, 227, 328, 430];
     var LANES = [120, 204, 284];
     this.isVisible = true;
+    // points, player gets taking this gem
     this.value = 15;
     this.sprite = 'images/Gem Orange.png';
     // [0, 4]
@@ -103,6 +111,7 @@
     this.width = 50;
     this.height = 85;
     this.setPos(x, y);
+    // in 10 seconds gem became blue
     this.transformTimer = setTimeout(this.transform.bind(this), 10000);
   };
 
@@ -132,6 +141,7 @@
   };
   Enemy.prototype = Object.create(ScreenObject.prototype);
 
+  // box model for collisions
   Enemy.prototype.initBox = function() {
     this.box = {
       x: this.x,
@@ -163,6 +173,7 @@
     this.initSpeed();
   };
 
+  // make enemies with different speed
   Enemy.prototype.initSpeed = function() {
     this.speed = this.baseSpeed + Math.random() * 200;
   };
@@ -184,11 +195,13 @@
     // remove previous hearts
     ctx.fillStyle = 'white';
     ctx.fillRect(300, 0, 600, 50);
+    // draw hearts
     for (var i = 0; i < this.health; ++i) {
       ctx.drawImage(Resources.get(this.healthSprite), 470 - i * 30, 0, 33, 56);
     }
   };
 
+  // box for calculating collisions
   Player.prototype.initBox = function() {
     this.box = {
       x: this.x + 16,
@@ -198,6 +211,7 @@
     };
   };
 
+  // handle keyboard
   Player.prototype.handleInput = function(direction) {
     var STEP_X = 100;
     var STEP_Y = 82;
@@ -221,10 +235,12 @@
     }
   };
 
+  // check if the player is in the water
   Player.prototype.checkWin = function() {
     return this.y < 50;
   };
 
+  // check if the player tries to go out of screen
   Player.prototype.checkBounds = function(x, y) {
     var maxWidth = ctx.canvas.width - 50;
     var maxHeight = ctx.canvas.height - 150;
@@ -240,6 +256,7 @@
     this.setPos(this.initX, this.initY);
   };
 
+  // run this function when player has won
   Player.prototype.win = function() {
     this.health = 5;
     if (score.value >= 50) {
@@ -248,7 +265,6 @@
       maxLevel = Math.max(level + 1, maxLevel);
       localStorage.setItem('maxLevel', maxLevel);
       var sprite = getNextPlayerSprite();
-      console.log(sprite  )
       localStorage.setItem('character', sprite);
       Game.text.showText('Mission passed!', 100);
     } else {
@@ -258,6 +274,7 @@
     this.reset();
   };
 
+  // run this function when player has lost
   Player.prototype.wasted = function() {
     this.reset();
     this.health--;
@@ -290,20 +307,25 @@
   };
 
   Score.prototype.render = function() {
+    // clear region with previous value
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, 300, 50);
+
     ctx.font = '36px Impact';
     ctx.fillStyle = 'red';
     ctx.lineWidth = 3;
     ctx.strokeStyle = 'black';
+
     var x = 5, y = 40;
     var txt = 'SCORE: ' + Math.round(this.value);
     ctx.strokeText(txt, x, y);
     ctx.fillText(txt, x, y);
+
     // notify once to go to the water if score > 50
     if (score.value < 50) {
       score.notified = false;
     }
+
     if (score.value > 50 && !score.notified) {
       score.notified = true;
       textBoard.showText('It\'s hot! Go to water!', 50);
@@ -340,6 +362,7 @@
     var element = event.target;
     var offsetX = 0, offsetY = 0;
 
+    // getting canvas offset
     if (element.offsetParent) {
       do {
           offsetX += element.offsetLeft;
@@ -361,6 +384,8 @@
   }
 
   // we detect the level by Player sprite
+  // it is used to understand the enemy speed and number
+  // and to get the data for the next level, if you win
   function getLevel() {
     var sprite = player.sprite.toLowerCase();
     if (sprite.indexOf('boy') !== -1) {
@@ -399,6 +424,7 @@
     player.reset();
     gem.reset();
     var level = getLevel();
+    // set Enemy speed and number, considering the level
     var enemyNumber = 3;
     var speed = 150;
     enemyNumber = 3;
@@ -439,7 +465,7 @@
       13: 'enter',
       32: 'space'
     };
-    // handle keyboard characters to choose character
+    // handle keyboard keys to choose character
     if ($('#heroes:visible')) {
       var key = allowedKeys[e.keyCode];
       if (key === 'left' || key === 'right') {
@@ -463,6 +489,7 @@
   });
 
   $(document).ready(function() {
+    // hero selection
     $('.hero').click(function() {
       if (!$(this).is('.disabled')) {
         $('.selected').removeClass('selected');
@@ -485,6 +512,7 @@
     $('#reset-btn').click(function() {
       reset();
     });
+    // this one says which player we are able to choose
     var maxLevel = localStorage.getItem('maxLevel');
     if (maxLevel) {
       for (var i = 1; i <= maxLevel; ++i) {
