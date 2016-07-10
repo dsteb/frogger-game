@@ -2,7 +2,7 @@
   'use strict';
 
   // change to true to see the boundaries of the objects
-  var debug = true;
+  var debug = false;
 
   // We do not want inherit Player from Enemy, as Player is not Enemy.
   // So this is the base class for all objects we add on the screen
@@ -241,20 +241,21 @@
   };
 
   Player.prototype.win = function() {
-    this.reset();
     this.health = 5;
     if (score.value >= 50) {
       var level = getLevel();
       var maxLevel = localStorage.getItem('maxLevel');
       maxLevel = Math.max(level + 1, maxLevel);
       localStorage.setItem('maxLevel', maxLevel);
-    }
-    if (Game.score.value < 0) {
-      Game.text.showText('Game Over!');
-    } else {
+      var sprite = getNextPlayerSprite();
+      console.log(sprite  )
+      localStorage.setItem('character', sprite);
       Game.text.showText('Mission passed!', 100);
+    } else {
+      Game.text.showText('Game Over!');
     }
     score.value = 0;
+    this.reset();
   };
 
   Player.prototype.wasted = function() {
@@ -375,10 +376,26 @@
     }
   }
 
+  // when player wins, we automatically set sprite and level to next
+  function getNextPlayerSprite() {
+    var level = getLevel();
+    switch (level) {
+      case 0:
+        return 'images/char-pink-girl.png';
+      case 1:
+          return 'images/char-cat-girl.png';
+      case 2:
+          return 'images/char-horn-girl.png';
+      case 3:
+        return 'images/char-princess-girl.png';
+      default:
+        return 'images/char-boy.png';
+    }
+  }
+
   // Game reset function is called by button "reset", by game start and
   // on game over
   function reset() {
-
     player.reset();
     gem.reset();
     var level = getLevel();
