@@ -95,6 +95,9 @@
   };
 
   Gem.prototype.reset = function() {
+    if (this.transformTimer) {
+      clearTimeout(this.transformTimer);
+    }
     // we have 4x3 cells to put a gem
     var COLUMNS = [25, 126, 227, 328, 430];
     var LANES = [120, 204, 284];
@@ -271,7 +274,8 @@
       Game.text.showText('Game Over!');
     }
     score.value = 0;
-    this.reset();
+    // game reset
+    reset();
   };
 
   // run this function when player has lost
@@ -422,7 +426,7 @@
   // on game over
   function reset() {
     player.reset();
-    gem.reset();
+    gem.hide();
     var level = getLevel();
     // set Enemy speed and number, considering the level
     var enemyNumber = 3;
