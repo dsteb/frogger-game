@@ -235,8 +235,8 @@
   };
 
   Player.prototype.reset = function() {
-    var $img = $('img', '.selected');
-    this.sprite = $img.attr('src');
+    var character = localStorage.getItem('character') || 'images/char-boy.png';
+    this.sprite = character;
     this.setPos(this.initX, this.initY);
   };
 
@@ -249,6 +249,11 @@
       maxLevel = Math.max(level + 1, maxLevel);
       localStorage.setItem('maxLevel', maxLevel);
     }
+    if (Game.score.value < 0) {
+      Game.text.showText('Game Over!');
+    } else {
+      Game.text.showText('Mission passed!', 100);
+    }
     score.value = 0;
   };
 
@@ -260,9 +265,8 @@
       score.value = 0;
       textBoard.showText('Game Over!');
     } else {
-      textBoard.showText('wasted!');
+      textBoard.showText('Wasted!');
     }
-
   };
 
   Player.prototype.onGemCaptured = function(gem) {
@@ -295,6 +299,14 @@
     var txt = 'SCORE: ' + Math.round(this.value);
     ctx.strokeText(txt, x, y);
     ctx.fillText(txt, x, y);
+    // notify once to go to the water if score > 50
+    if (score.value < 50) {
+      score.notified = false;
+    }
+    if (score.value > 50 && !score.notified) {
+      score.notified = true;
+      textBoard.showText('It\'s hot! Go to water!', 50);
+    }
   };
 
   // Class for showing different text messages on the screen
@@ -366,6 +378,7 @@
   // Game reset function is called by button "reset", by game start and
   // on game over
   function reset() {
+
     player.reset();
     gem.reset();
     var level = getLevel();
@@ -444,6 +457,9 @@
       $('#menu-btn,#reset-btn').removeClass('hidden');
       $('#heroes').hide();
       $('#help').removeClass('hidden');
+      var $img = $('.selected > img');
+      var character = $img.attr('src');
+      localStorage.setItem('character', character);
       Engine.init();
     });
     $('#menu-btn').click(function() {

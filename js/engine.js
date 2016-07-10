@@ -32,6 +32,7 @@
   canvas.width = 505;
   canvas.height = 606;
   canvas.addEventListener('click', Game.onCanvasClick);
+  // prependTo
   doc.body.insertBefore(canvas, doc.body.firstChild);
 
   /* This function serves as the kickoff point for the game loop itself
@@ -164,11 +165,6 @@
     }
     if (Game.player.checkWin()) {
       setTimeout(function() {
-        if (Game.score.value < 0) {
-          Game.text.showText('Game Over!');
-        } else {
-          Game.text.showText('Mission passed!', 100);
-        }
         Game.player.win();
       }, 0);
     }
@@ -199,8 +195,6 @@
    */
   function reset() {
     Game.reset();
-    // hide: wait 10 seconds and then do reset
-    Game.gem.hide();
   }
 
   /* Go ahead and load all of the images we know we're going to need to
