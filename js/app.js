@@ -443,6 +443,7 @@
       $(this).hide();
       $('#menu-btn,#reset-btn').removeClass('hidden');
       $('#heroes').hide();
+      $('#help').removeClass('hidden');
       Engine.init();
     });
     $('#menu-btn').click(function() {
